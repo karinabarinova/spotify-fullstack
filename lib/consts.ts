@@ -1,0 +1,5 @@
+const COOKIE_NAME = 'TRAX_ACCESS_TOKEN'
+
+export {
+    COOKIE_NAME,
+}
