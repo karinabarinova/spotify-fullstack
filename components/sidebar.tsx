@@ -47,14 +47,14 @@ export const Sidebar = () => {
                 <Box marginBottom="20px">
                     <List spacing={2}>
                         {navMenu.map(item => (
-                            <LListItem item={item} />
+                            <LListItem item={item} key={item.name} />
                         ))}
                     </List>
                 </Box>
                 <Box marginTop="20px">
                     <List spacing={2}>
                         {musicMenu.map(item => (
-                            <LListItem item={item} />
+                            <LListItem item={item} key={item.name} />
                         ))}
                     </List>
                 </Box>
