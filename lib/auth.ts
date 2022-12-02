@@ -21,15 +21,14 @@ export const validateRoute = (handler) => {
                 if (!user) {
                     throw new Error('User does not exist')
                 }
-
             } catch (e) {
                 res.status(401).json({ error: 'Not Authorized' })
                 return
             }
             return handler(req, res, user)
-
         }
         res.status(401).json({ error: 'Not Authorized' })
-
     }
 }
+
+export const validateToken = token => (jwt.verify(token, 'secret'))
