@@ -7,6 +7,7 @@ export type User = {
     firstName: string
     lastName: string
     playlists: Playlist[]
+    playlistsCount: number
 }
 
 export type Playlist = {
