@@ -4,7 +4,8 @@ export type User = {
     updatedAt: Date
     email: string
     password: string
-    name: string
+    firstName: string
+    lastName: string
     playlists: Playlist[]
 }
 
