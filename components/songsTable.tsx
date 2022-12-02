@@ -1,6 +1,7 @@
 import { Box, Table, Thead, Td, Tbody, Tr, IconButton, Th } from '@chakra-ui/react'
-import { BsFillPlayFill } from 'react-icons/bs'
+import { BsFillPlayFill, BsHeart } from 'react-icons/bs'
 import { AiOutlineClockCircle } from 'react-icons/ai'
+import { MdOutlineMoreHoriz } from 'react-icons/md'
 import { formatDate, formatTime } from '../lib/formatters'
 
 export const SongsTable = ({ songs }) => {
@@ -11,6 +12,22 @@ export const SongsTable = ({ songs }) => {
                     icon={<BsFillPlayFill fontSize='30px' />}
                     colorScheme='green'
                     aria-label='play'
+                    isRound={true}
+                    size='lg'
+                    marginRight={5}
+                />
+                <IconButton
+                    icon={<BsHeart fontSize='25px' color='green' />}
+                    colorScheme='transparent'
+                    aria-label='play'
+                    isRound={true}
+                    size='lg'
+                    marginRight={5}
+                />
+                <IconButton
+                    icon={< MdOutlineMoreHoriz fontSize='30px' />}
+                    colorScheme='transparent'
+                    aria-label='more'
                     isRound={true}
                     size='lg'
                 />
