@@ -69,10 +69,10 @@ export const Player = ({ songs, activeSong }) => {
     return (
         <Box>
             <Box>
-                {/* <ReactHowler
+                <ReactHowler
                     playing={playing}
                     src={activeSong.url}
-                /> */}
+                />
             </Box>
             <Center color='gray.600'>
                 <ButtonGroup>
