@@ -22,13 +22,21 @@ import {
 } from 'react-icons/md'
 import { useStoreActions } from 'easy-peasy'
 
-export const Player = () => {
+export const Player = ({ songs, activeSong }) => {
+    const [playing, setPlaying] = useState(true)
+    const [index, setIndex] = useState(0)
+    const [seek, setSeek] = useState(0)
+    const [repeat, setRepeat] = useState(false)
+    const [shuffle, setShuffle] = useState(false)
+    const [duration, setDuration] = useState(0)
+
 
     const getIcon = (
         icon: ReactElement<any, string | JSXElementConstructor<any>>,
         ariaLabel: string,
-        fontSize: string = '25px',
-        color?: string
+        fontSize: string,
+        active: boolean = false,
+        onClick: () => void
     ) => {
         return (
             <IconButton
@@ -37,25 +45,46 @@ export const Player = () => {
                 outline='none'
                 variant='link'
                 aria-label={ariaLabel}
-                color={color}
+                color={active ? 'white' : 'gray.600'}
+                onClick={onClick}
             />
         )
+    }
+
+    const setPlayState = (value: boolean) => {
+        setPlaying(value)
+    }
+
+    const onShuffle = () => {
+        //setting state is async, there is no guarantee that this will work
+        //setShuffle(!shuffle)
+        //that's why we are using a callback to make sure we're working with the current state
+        setShuffle((state) => !state)
+    }
+
+    const onRepeat = () => {
+        setRepeat((state) => !state)
     }
 
     return (
         <Box>
             <Box>
-                {/* <ReactHowler /> */}
+                {/* <ReactHowler
+                    playing={playing}
+                    src={activeSong.url}
+                /> */}
             </Box>
             <Center color='gray.600'>
                 <ButtonGroup>
-                    {getIcon(<MdShuffle />, 'shuffle')}
-                    {getIcon(<MdSkipPrevious />, 'previous')}
-                    {getIcon(<MdOutlinePlayCircleFilled />, 'play', '40px', 'white')}
-                    {getIcon(<MdOutlinePauseCircleFilled />, 'pause', '40px', 'white')}
-                    {getIcon(<MdSkipNext />, 'next')}
-                    {getIcon(<MdOutlineRepeat />, 'repeat')}
-
+                    {getIcon(<MdShuffle />, 'shuffle', '25px', shuffle, onShuffle)}
+                    {getIcon(<MdSkipPrevious />, 'previous', '25px')}
+                    {playing ? (
+                        getIcon(<MdOutlinePauseCircleFilled />, 'pause', '40px', playing, () => setPlayState(false),)
+                    ) : (
+                        getIcon(<MdOutlinePlayCircleFilled />, 'play', '40px', !playing, () => setPlayState(true),)
+                    )}
+                    {getIcon(<MdSkipNext />, 'next', '25px')}
+                    {getIcon(<MdOutlineRepeat />, 'repeat', '25px', repeat, onRepeat)}
                 </ButtonGroup>
             </Center>
             <Box color='gray.600'>
@@ -81,7 +110,6 @@ export const Player = () => {
                         <Text fontSize='xs'>321</Text>
                     </Box>
                 </Flex>
-
             </Box>
         </Box>
     )
