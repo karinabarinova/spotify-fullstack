@@ -170,7 +170,7 @@ export const Player = ({ songs, activeSong }) => {
                             stop={0.1}
                             min={0}
                             id='player-range'
-                            max={duration ? duration.toFixed(2) : 0}
+                            max={duration ? duration.toFixed(2) as unknown as number : 0}
                             onChange={onSeek}
                             value={[seek]}
                             onChangeStart={() => setIsSeeking(true)}
