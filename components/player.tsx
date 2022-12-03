@@ -21,15 +21,17 @@ import {
     MdOutlineRepeat
 } from 'react-icons/md'
 import { useStoreActions } from 'easy-peasy'
+import { formatTime } from '../lib/formatters'
 
 export const Player = ({ songs, activeSong }) => {
     const [playing, setPlaying] = useState(true)
     const [index, setIndex] = useState(0)
     const [seek, setSeek] = useState(0)
+    const [isSeeking, setIsSeeking] = useState(false)
     const [repeat, setRepeat] = useState(false)
     const [shuffle, setShuffle] = useState(false)
-    const [duration, setDuration] = useState(0)
-
+    const [duration, setDuration] = useState(0.0)
+    const soundRef = useRef(null)
 
     const getIcon = (
         icon: ReactElement<any, string | JSXElementConstructor<any>>,
@@ -66,24 +68,71 @@ export const Player = ({ songs, activeSong }) => {
         setRepeat((state) => !state)
     }
 
+    const prevSong = () => {
+        setIndex((state) => {
+            return state ? state - 1 : songs.length - 1
+        })
+    }
+
+    const nextSong = () => {
+        setIndex((state) => {
+            if (shuffle) {
+                //shuffle logic
+                const next = Math.floor(Math.random() * songs.length)
+
+                if (next === state) {
+                    return nextSong()
+                }
+                return next
+            } else {
+                return state === songs.lengt - 1 ? 0 : state + 1
+            }
+        })
+    }
+
+    const onSongEnd = () => {
+        setIndex((state) => {
+            if (repeat) {
+                setSeek(0)
+                soundRef.current.seek(0)
+            } else {
+                nextSong()
+            }
+        })
+    }
+
+    const onSeek = (e) => {
+        //get min from an event array
+        setSeek(parseFloat(e[0]))
+        soundRef.current.seek(e[0])
+    }
+
+    const onLoad = () => {
+        const songDuration = soundRef.current.duration()
+        setDuration(songDuration)
+    }
+
     return (
         <Box>
             <Box>
                 <ReactHowler
+                    ref={soundRef}
                     playing={playing}
                     src={activeSong.url}
+                    onLoad={onLoad}
+                    onEnd={onSongEnd}
                 />
             </Box>
             <Center color='gray.600'>
                 <ButtonGroup>
                     {getIcon(<MdShuffle />, 'shuffle', '25px', shuffle, onShuffle)}
-                    {getIcon(<MdSkipPrevious />, 'previous', '25px')}
+                    {getIcon(<MdSkipPrevious />, 'previous', '25px', false, prevSong)}
                     {playing ? (
                         getIcon(<MdOutlinePauseCircleFilled />, 'pause', '40px', playing, () => setPlayState(false),)
                     ) : (
                         getIcon(<MdOutlinePlayCircleFilled />, 'play', '40px', !playing, () => setPlayState(true),)
                     )}
-                    {getIcon(<MdSkipNext />, 'next', '25px')}
+                    {getIcon(<MdSkipNext />, 'next', '25px', false, nextSong)}
                     {getIcon(<MdOutlineRepeat />, 'repeat', '25px', repeat, onRepeat)}
                 </ButtonGroup>
             </Center>
@@ -97,8 +146,12 @@ export const Player = ({ songs, activeSong }) => {
                             aria-label={['min', 'max']}
                             stop={0.1}
                             min={0}
-                            max={321}
                             id='player-range'
+                            max={duration ? duration.toFixed(2) : 0}
+                            onChange={onSeek}
+                            value={[seek]}
+                            onChangeStart={() => setIsSeeking(true)}
+                            onChangeEnd={() => setIsSeeking(false)}
                         >
                             <RangeSliderTrack bg='gray.800'>
                                 <RangeSliderFilledTrack bg='gray.600' />
@@ -107,7 +160,7 @@ export const Player = ({ songs, activeSong }) => {
                         </RangeSlider>
                     </Box>
                     <Box width='10%' textAlign='right'>
-                        <Text fontSize='xs'>321</Text>
+                        <Text fontSize='xs'>{formatTime(duration)}</Text>
                     </Box>
                 </Flex>
             </Box>
