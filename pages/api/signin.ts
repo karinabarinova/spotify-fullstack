@@ -22,7 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 id: user.id,
                 time: Date.now()
             },
-            'secret',
+            process.env.APP_SECRET,
             { expiresIn: '8h' }
         )
         res.setHeader(
