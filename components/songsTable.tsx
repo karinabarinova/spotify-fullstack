@@ -49,8 +49,9 @@ export const SongsTable = ({ songs }) => {
     return (
         <Box bg='transparent' color='white'>
             <Box padding='10px' marginBottom='20px'>
-                {buttons.map(({ icon, color, ariaLabel, marginRight, onClick }) => (
+                {buttons.map(({ icon, color, ariaLabel, marginRight, onClick }, i) => (
                     <IconButton
+                        key={i}
                         icon={icon}
                         colorScheme={color}
                         aria-label={ariaLabel}
