@@ -1,7 +1,6 @@
 import {
     ButtonGroup,
     Box,
-    IconButtonProps,
     RangeSlider,
     RangeSliderFilledTrack,
     RangeSliderTrack,
@@ -22,7 +21,6 @@ import {
     MdOutlineRepeat
 } from 'react-icons/md'
 import { useStoreActions } from 'easy-peasy'
-import { IconType } from 'react-icons'
 
 export const Player = () => {
 
@@ -60,6 +58,31 @@ export const Player = () => {
 
                 </ButtonGroup>
             </Center>
+            <Box color='gray.600'>
+                <Flex justify='center' align='center'>
+                    <Box width='10%'>
+                        <Text fontSize='xs'>1:21</Text>
+                    </Box>
+                    <Box width='80%'>
+                        <RangeSlider
+                            aria-label={['min', 'max']}
+                            stop={0.1}
+                            min={0}
+                            max={321}
+                            id='player-range'
+                        >
+                            <RangeSliderTrack bg='gray.800'>
+                                <RangeSliderFilledTrack bg='gray.600' />
+                            </RangeSliderTrack>
+                            <RangeSliderThumb index={0} />
+                        </RangeSlider>
+                    </Box>
+                    <Box width='10%' textAlign='right'>
+                        <Text fontSize='xs'>321</Text>
+                    </Box>
+                </Flex>
+
+            </Box>
         </Box>
     )
 }
